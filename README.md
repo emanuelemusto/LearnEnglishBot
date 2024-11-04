@@ -43,12 +43,7 @@
   
 # Esecuzione
 ## In locale
-Aprire terminale in VSCode e digitare 'node server.js'.
-L'app è all'indirizzo 'localhost:80'
-  
-## In cloud
-La risorsa è all'indirizzo mostrato in 'servizio app/panoramica/URL' nel portale Azure
-Si consiglia l'utilizzo di browser Google Chrome o Mozilla Firefox.
+aprire telegrame ed iniziare a chattare
   
 ## Architettura
 ![alt text](resources/Architettura.png)
