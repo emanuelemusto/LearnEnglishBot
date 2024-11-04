@@ -33,11 +33,7 @@
   
 ## Azure app service
 - Creare una nuova risorsa [app service](https://docs.microsoft.com/it-it/azure/app-service/quickstart-nodejs?tabs=linux&pivots=development-environment-vscode), operazione facilitata usando vsCode. Installare l'estensione 'azure app service' in vscode e seguire il tutorial al link sopra.
-- Recarsi nel servizio app creato nel portale azure, andare in 'configurazione' ed aggiungere i seguenti parametri:
-  1. PORT 80
-  2. WEBSITES_PORT 80
-  3. WEBSITES_CONTAINER_START_TIME_LIMIT: 1800 
-  4. Salvare le modifiche col bottone 'Salva'
+- creare un bot telegram con bot father e copiare il token nel codice
 
   
   
