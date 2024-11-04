@@ -13,20 +13,20 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 
 
 // Replace 'YOUR_BOT_TOKEN' with your Telegram Bot token
-const bot = new TelegramBot('8024182389:AAEO5DyjKl8gwsEMvXn5Cjv7SjXpgwsSlV4', { polling: true });
+const bot = new TelegramBot('', { polling: true }); // token
 
 // Azure SQL Database configuration
 const config = {
   authentication: {
     options: {
       userName: "travelbot",
-      password: "Sqlserver24@"
+      password: "" // password
     },
     type: "default"
   },
-  server: "sql-server-cloud-computing.database.windows.net",
+  server: "",
   options: {
-    database: "flightBook",
+    database: "", 
     encrypt: true
   }
 };
@@ -34,7 +34,7 @@ const config = {
 const connection = new Connection(config);
 
 // Azure Speech Services configuration
-const subscriptionKey = 'e39c5b2154aa487eb3a6c3019fec8431';
+const subscriptionKey = '';
 const serviceRegion = 'westeurope';
 
 // Quiz state
@@ -134,7 +134,7 @@ function sendNextQuestion(chatId) {
 bot.on('voice', async (msg) => {
   const chatId = msg.chat.id;
   const voiceFileId = msg.voice.file_id;
-  const token = '8024182389:AAEO5DyjKl8gwsEMvXn5Cjv7SjXpgwsSlV4';
+  const token = ''; // telegram token
 
   try {
     // Scarica il file audio
