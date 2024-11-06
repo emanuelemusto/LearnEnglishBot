@@ -13,20 +13,20 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 
 
 // Replace 'YOUR_BOT_TOKEN' with your Telegram Bot token
-const bot = new TelegramBot('', { polling: true }); // token
+const bot = new TelegramBot('', { polling: true });
 
 // Azure SQL Database configuration
 const config = {
   authentication: {
     options: {
-      userName: "travelbot",
-      password: "" // password
+      userName: "",
+      password: ""
     },
     type: "default"
   },
   server: "",
   options: {
-    database: "", 
+    database: "",
     encrypt: true
   }
 };
@@ -34,7 +34,7 @@ const config = {
 const connection = new Connection(config);
 
 // Azure Speech Services configuration
-const subscriptionKey = '';
+const subscriptionKey = 'e39c5b2154aa487eb3a6c3019fec8431';
 const serviceRegion = 'westeurope';
 
 // Quiz state
@@ -134,7 +134,7 @@ function sendNextQuestion(chatId) {
 bot.on('voice', async (msg) => {
   const chatId = msg.chat.id;
   const voiceFileId = msg.voice.file_id;
-  const token = ''; // telegram token
+  const token = '';
 
   try {
     // Scarica il file audio
@@ -179,8 +179,9 @@ bot.on('voice', async (msg) => {
     const recognizer = new sdk.SpeechRecognizer(speechConfig, audioConfig);
 
     // Configurazione della valutazione della pronuncia
+    const state = quizState[chatId];
     const pronunciationAssessmentConfig = new sdk.PronunciationAssessmentConfig(
-      "Your reference text here",
+      state.currentQuestion,
       sdk.PronunciationAssessmentGradingSystem.HundredMark,
       sdk.PronunciationAssessmentGranularity.Phoneme,
       true
