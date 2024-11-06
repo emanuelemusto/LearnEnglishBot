@@ -113,7 +113,7 @@ bot.onText(/\/start/, async (msg) => {
     sendNextQuestion(chatId);
   } catch (error) {
     console.error("Error starting quiz:", error);
-    bot.sendMessage(chatId, "Sorry, I couldn't start the quiz. Please try again later.");
+    bot.sendMessage(chatId, "Scusa non ho potuto iniziare il test riprova più tardi.");
   }
 });
 
@@ -121,12 +121,12 @@ bot.onText(/\/start/, async (msg) => {
 function sendNextQuestion(chatId) {
   const state = quizState[chatId];
   if (state.questionCounter >= 10 || state.phrases.length === 0) {
-    bot.sendMessage(chatId, `Quiz completed! Your final score is ${state.score}`);
+    bot.sendMessage(chatId, `Quiz completato! punteggio finale ${state.score} / 4000`);
     delete quizState[chatId];
   } else {
     state.questionCounter++;
     state.currentQuestion = state.phrases.pop();
-    bot.sendMessage(chatId, `Question ${state.questionCounter}/10: ${state.currentQuestion}`);
+    bot.sendMessage(chatId, `Sentence/Frase ${state.questionCounter}/10: ${state.currentQuestion}`);
   }
 }
 
@@ -134,7 +134,7 @@ function sendNextQuestion(chatId) {
 bot.on('voice', async (msg) => {
   const chatId = msg.chat.id;
   const voiceFileId = msg.voice.file_id;
-  const token = '';
+  const token = '8024182389:AAEO5DyjKl8gwsEMvXn5Cjv7SjXpgwsSlV4';
 
   try {
     // Scarica il file audio
@@ -312,10 +312,10 @@ bot.onText(/\/pronounce/, async (msg) => {
       }
     } catch (err) {
       console.error("Error in pronunciation feature:", err);
-      bot.sendMessage(chatId, "Sorry, I couldn't generate the pronunciation audio. Here's a text version instead: " + state.currentQuestion);
+      bot.sendMessage(chatId, "Scusa non sono riuscito a generare il suggerimento per questa frase: " + state.currentQuestion);
     }
   } else {
-    bot.sendMessage(chatId, "No active question. Start a quiz with /start");
+    bot.sendMessage(chatId, "Nessun test attivo avvialo con il comando /start");
   }
 });
 
