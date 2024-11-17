@@ -120,13 +120,16 @@ bot.onText(/\/start/, async (msg) => {
 // Send next question
 function sendNextQuestion(chatId) {
   const state = quizState[chatId];
-  if (state.questionCounter >= 10 || state.phrases.length === 0) {
+  if (state?.questionCounter >= 10 || state?.phrases.length === 0) {
     bot.sendMessage(chatId, `Quiz completato! punteggio finale ${state.score} / 4000`);
     delete quizState[chatId];
   } else {
+  if (state == undefined) {
+    return;
+  }
     state.questionCounter++;
     state.currentQuestion = state.phrases.pop();
-    bot.sendMessage(chatId, `Sentence/Frase ${state.questionCounter}/10: ${state.currentQuestion}`);
+    bot.sendMessage(chatId, `Frase n° ${state.questionCounter}/10: ${state.currentQuestion}`);
   }
 }
 
@@ -250,7 +253,9 @@ bot.onText(/\/pronounce/, async (msg) => {
   const state = quizState[chatId];
   if (state && state.currentQuestion) {
     try {
-      console.log("Attempting to generate pronunciation for:", state.currentQuestion);
+      const message = 'Attempting to generate pronunciation for: ' +  state.currentQuestion; 
+      console.log(message);
+      bot.sendMessage(chatId, message);
 
       const tempFilePath = `pronunciation_${Date.now()}.wav`;
 
@@ -319,9 +324,70 @@ bot.onText(/\/pronounce/, async (msg) => {
   }
 });
 
-// Function to generate pronunciation audio using Azure Speech Services
-async function generatePronunciationAudio(text) {
+// Gestisce il comando /translate
+bot.onText(/\/translate/, async (msg) => {
+  const chatId = msg.chat.id;
+  const state = quizState[chatId];
+  if (state == undefined) {
+    return null;
+  }
+  const question = state.currentQuestion;
+  try {
+      // Invia messaggio di attesa
+      bot.sendMessage(chatId, 'Sto traducendo...')
+      .then(waitMessage => {
+        // Inizia la traduzione con timeout
+        translateText(question)
+            .then(translatedText => {
+                // Aggiorna il messaggio con la traduzione
+                bot.editMessageText(
+                    `🔄 Testo originale: ${question}\n` +
+                    `🎯 Traduzione (IT): ${translatedText}`,
+                    {
+                        chat_id: chatId,
+                        message_id: waitMessage.message_id
+                    }
+                );
+            })
+            .catch(error => {
+                bot.sendMessage(chatId, '❌ Mi dispiace, c\'è stato un errore durante la traduzione.');
+                console.error(error);
+            });
+    });
+  } catch (error) {
+      bot.sendMessage(chatId, '❌ Mi dispiace, c\'è stato un errore durante la traduzione.');
+      console.error(error);
+  }
+});
 
+const endpoint = 'https://api.cognitive.microsofttranslator.com';
+
+async function translateText(text, targetLanguage = 'it', sourceLanguage = 'en') {
+  try {
+      const response = await axios({
+          baseURL: endpoint,
+          url: 'translate',
+          method: 'POST',
+          headers: {
+              'Ocp-Apim-Subscription-Key': '5d4f03c8aa614cd5a6e4884ce2026099',
+              'Ocp-Apim-Subscription-Region': 'italynorth',
+              'Content-type': 'application/json',
+          },
+          params: {
+              'api-version': '3.0',
+              'from': sourceLanguage,
+              'to': targetLanguage
+          },
+          data: [{
+              'text': text
+          }],
+          json: true,
+      });
+      return response.data[0].translations[0].text;
+  } catch (error) {
+      console.error('Errore durante la traduzione:', error);
+      throw error;
+  }
 }
 
 // Function to generate fallback audio using a free TTS API
