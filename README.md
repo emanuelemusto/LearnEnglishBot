@@ -42,5 +42,5 @@
 aprire telegrame ed iniziare a chattare
   
 ## Architettura
-![alt text](presentazione/architettura.jpeg)
+![alt text](presentazione/architettura.jpg)
   
