@@ -34,8 +34,8 @@ const config = {
 const connection = new Connection(config);
 
 // Azure Speech Services configuration
-const subscriptionKey = 'e39c5b2154aa487eb3a6c3019fec8431';
-const serviceRegion = 'westeurope';
+const subscriptionKey = '';
+const serviceRegion = '';
 
 // Quiz state
 let quizState = {};
@@ -369,8 +369,8 @@ async function translateText(text, targetLanguage = 'it', sourceLanguage = 'en')
           url: 'translate',
           method: 'POST',
           headers: {
-              'Ocp-Apim-Subscription-Key': '5d4f03c8aa614cd5a6e4884ce2026099',
-              'Ocp-Apim-Subscription-Region': 'italynorth',
+              'Ocp-Apim-Subscription-Key': '',
+              'Ocp-Apim-Subscription-Region': '',
               'Content-type': 'application/json',
           },
           params: {
