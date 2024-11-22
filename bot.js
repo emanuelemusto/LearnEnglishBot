@@ -10,23 +10,22 @@ const fs = require('fs');
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
+require('dotenv').config();
 
-
-// Replace 'YOUR_BOT_TOKEN' with your Telegram Bot token
-const bot = new TelegramBot('', { polling: true });
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 
 // Azure SQL Database configuration
 const config = {
   authentication: {
     options: {
-      userName: "",
-      password: ""
+      userName: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD
     },
     type: "default"
   },
-  server: "",
+  server: process.env.DB_SERVER,
   options: {
-    database: "",
+    database: process.env.DB_NAME,
     encrypt: true
   }
 };
@@ -34,8 +33,8 @@ const config = {
 const connection = new Connection(config);
 
 // Azure Speech Services configuration
-const subscriptionKey = '';
-const serviceRegion = '';
+const subscriptionKey = process.env.SPEECH_KEY;
+const serviceRegion = process.env.SPEECH_REGION;
 
 // Quiz state
 let quizState = {};
@@ -137,7 +136,7 @@ function sendNextQuestion(chatId) {
 bot.on('voice', async (msg) => {
   const chatId = msg.chat.id;
   const voiceFileId = msg.voice.file_id;
-  const token = '8024182389:AAEO5DyjKl8gwsEMvXn5Cjv7SjXpgwsSlV4';
+  const token = process.env.TELEGRAM_BOT_TOKEN;
 
   try {
     // Scarica il file audio
@@ -253,7 +252,7 @@ bot.onText(/\/pronounce/, async (msg) => {
   const state = quizState[chatId];
   if (state && state.currentQuestion) {
     try {
-      const message = 'Attempting to generate pronunciation for: ' +  state.currentQuestion; 
+      const message = 'Generando pronuncia: ' +  state.currentQuestion; 
       console.log(message);
       bot.sendMessage(chatId, message);
 
@@ -369,9 +368,9 @@ async function translateText(text, targetLanguage = 'it', sourceLanguage = 'en')
           url: 'translate',
           method: 'POST',
           headers: {
-              'Ocp-Apim-Subscription-Key': '',
-              'Ocp-Apim-Subscription-Region': '',
-              'Content-type': 'application/json',
+            'Ocp-Apim-Subscription-Key': process.env.TRANSLATION_KEY,
+            'Ocp-Apim-Subscription-Region': process.env.TRANSLATION_REGION,
+            'Content-type': 'application/json',
           },
           params: {
               'api-version': '3.0',
